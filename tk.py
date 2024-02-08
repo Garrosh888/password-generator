@@ -1,0 +1,169 @@
+from tkinter import*
+from generate_password import generate_password
+
+def focus_in_entr1(event):#удаление подскаски когда елемент в фокуси(когда наш курсор там)
+    if entr1["fg"] == "#757575":
+        entr1.delete(0,END)
+
+
+
+def focus_out_entr1(event):#добавление подсказки когда елемент не в фокусе и пользователь ничего не ввел
+    if len(entr1.get()) == 0:
+        entr1["fg"] = "#757575"
+        entr1.insert(0,"4-24 символа")
+
+
+def change_galocka(event):
+    global use_user_symbols
+    check_data()#выозов функции
+    if is_correct == True:
+        cnv_for_galochka.itemconfigure(img_galocka,image = img_zelenaa_galochka)
+        save_settings()
+    else:
+        cnv_for_galochka.itemconfigure(img_galocka, image = img_red_galochka)
+
+def save_settings():
+    if len(entr2.get()) == 0:#⬇⬇️⬇️
+        entr2.insert(0,str(len(entr1.get())))#заполнение поля длины пароля(будет в том случае если пользователь не указал сам длину пароля)
+    symbols = entr1.get()
+    is_numbers = False
+    is_letters = False
+    is_caps_letters = False
+    is_symbols = False
+    for i in symbols:
+        if i.isdigit() == True:
+            is_numbers = True
+        for letter in object_generate_password.letters:
+            if letter == i:
+                is_letters = True
+                break
+        for letter in object_generate_password.caps_letters:
+            if letter == i:
+                is_caps_letters = True
+                break
+        for letter in object_generate_password.symbols:
+            if letter == i:
+                is_symbols = True
+                break
+    if is_numbers == True:
+        btn1["bg"] = "green"
+    else:
+        btn1["bg"] = "red"
+    if is_letters == True:
+        btn2["bg"] = "green"
+    else:
+        btn2["bg"] = "red"
+    if is_caps_letters == True:
+        btn3["bg"] = "green"
+    else:
+        btn3["bg"] = "red"
+    if is_symbols == True:
+        btn4["bg"] = "green"
+    else:
+        btn4["bg"] = "red"
+
+def validate_entr1(text):#валидация на галочку на сохранение измения
+    if len(text) == 0 or text == "4-24 символа":
+        entr1["fg"] = "#757575"
+    else:
+        entr1["fg"] = "black"
+
+    if len(text) < 4:
+        cnv_for_galochka.itemconfigure(img_galocka,image = img_red_galochka)#itemconfigure - это изминение свойства у элемента на канве
+    return validate_length_pass_entr2(text)
+
+
+def validate_length_pass_entr1(text):#validate это правило ,в данном примере правила ввода длины пароля
+    if len(text) == 0:
+        return True
+    if len(text) >2:
+        return  False
+    if text.isdigit() and int(text) > 24:
+        return False
+    return text.isdigit()#isdigit - проверка является ли текст числом
+
+def validate_length_pass_entr2(text):#validate это правило ,в данном примере правила ввода длины пароля
+    if len(text) > 24:
+        return False
+    else:
+        return True
+def validate_paste_password_entr(text):
+    return permission_for_password
+
+
+def check_data():#проверка что пользвателем введено не более 24 символов
+    global is_correct
+    if len(entr1.get()) >= 4 and len(entr1.get()) <= 24:
+        is_correct = True
+    else:
+        is_correct = False
+    if is_correct == False:
+        return
+
+
+
+use_user_symbols= True#значение False символа для пароля генерируются програмой,значение True когда используються символы ввиденые пользователем
+window = Tk()
+window.resizable(0,0)
+window.title("password from sfit")
+cnv = Canvas(window,width = 700,height=500)
+cnv.pack()
+cnv_for_galochka = Canvas(cnv,width=25,height=25,bg="white")
+cnv_for_galochka.place(x=50, y=300)
+regester_validate_entr1 = window.register(validate_entr1)#регестрация функции для валидации
+object_generate_password = generate_password()
+permission_for_password = False
+regester_validate_paste_password_entr = window.register(validate_paste_password_entr)
+
+
+
+
+
+x_btn = 330
+btn1 = Button(cnv,text="Цифры",font=(None,20),bg= "grey",fg= "black")
+btn1.place(x = x_btn ,y =30 )
+btn2 = Button(cnv,text="Маленькие буквы",font=(None,20),bg= "grey",fg= "black")
+btn2.place(x = x_btn ,y = 130 )
+btn3 = Button(cnv,text="Заглавные буквы",font=(None,20),bg= "grey",fg= "black")
+btn3.place(x = x_btn ,y =230 )
+btn4 = Button(cnv,text="Специальные символы",font=(None,20),bg= "grey",fg= "black")
+btn4.place(x = x_btn ,y =330 )
+btn5 = Button(cnv,text="Исключать похожие символы",font=(None,19),bg= "grey",fg= "black")
+btn5.place(x = x_btn,y =430 )
+btn6 = Button(cnv,text="Сгенерировать",font=(None,20),bg= "gold",fg= "black")
+btn6.place(x = 40 ,y =330 )
+
+entr1 = Entry(cnv,font=(None,17),fg = "#757575",width=24,validate= "key",validatecommand= (regester_validate_entr1,"%P"))
+entr1.place(x= 5,y = 130)#  %P  = текст из елемента entr1
+entr1.insert(0,"4-24 символа")#insert это - вставка текста
+entr1.bind("<FocusIn>",focus_in_entr1)
+entr1.bind("<FocusOut>",focus_out_entr1)
+validate = window.register(validate_length_pass_entr1)#регестрируем функцию как валидацию
+entr2 = Entry(cnv,font=(None,20),width = 2,validate = "key",validatecommand= (validate,"%P"),)#
+entr2.place(x= 5,y = 30)
+entr2.focus_set()
+entr_password = Entry(cnv,font=(None,18),width=24,validate= "key",validatecommand=(regester_validate_paste_password_entr,"%P"))
+entr_password.place(x = 5, y = 400)
+
+
+
+cnv.create_text(5,111,text="Генерировать из символов:",anchor=NW)
+cnv.create_text(10,170,text="4-24 символа",anchor=NW)
+cnv.create_text(80,300,text="сохранить изменения",anchor=NW)
+cnv.create_text(5,10,text="количество символов от 4 до 24",anchor=NW)
+img_zelenaa_galochka = PhotoImage(file="zelenaa_galochka.png")
+img_red_galochka = PhotoImage(file ="red_galochka.png")
+
+img_galocka = cnv_for_galochka.create_image(2, 1, anchor = NW, image = img_red_galochka)#⬇
+#создание изображения с именем img_galocka на канве с свойством image = img_belaa_galochka
+cnv_for_galochka.tag_bind(img_galocka,"<Button-1>",change_galocka)
+
+is_correct = False#показатель коректные ли даннные в програме(4 - 24 символов)
+
+
+
+
+
+window.mainloop()
+
+
