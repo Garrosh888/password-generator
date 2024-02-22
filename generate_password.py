@@ -14,7 +14,7 @@ class generate_password():
         self.users_symbols = input("введите символы для пароля \n")
 
     def generate_user_symbols_password(self):
-        self.len_password = len(self.users_symbols)
+        #self.len_password = len(self.users_symbols)
         use_index = []
         self.password = ""
         for i in range(self.len_password):#цикл длится столько рас сколько длина нашего пароля
