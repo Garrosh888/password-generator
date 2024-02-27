@@ -1,5 +1,10 @@
 from tkinter import*
 from generate_password import generate_password
+def click_btns(btn):
+    if btn["bg"] == "grey":
+        btn["bg"] = "green"
+    elif btn["bg"] == "green":
+        btn["bg"] = "grey"
 
 def click_generate_password():
     global permission_for_password
@@ -34,44 +39,83 @@ def change_galocka(event):
         cnv_for_galochka.itemconfigure(img_galocka, image = img_red_galochka)
 
 def save_settings():
-    if len(entr2.get()) == 0:#⬇⬇️⬇️
-        entr2.insert(0,str(len(entr1.get())))#заполнение поля длины пароля(будет в том случае если пользователь не указал сам длину пароля)
-    symbols = entr1.get()
+    is_user_symbols = True
     is_numbers = False
     is_letters = False
     is_caps_letters = False
     is_symbols = False
-    for i in symbols:
-        if i.isdigit() == True:
+    is_dublicate = False
+    if len(entr1.get()) == 0:#⬇⬇️⬇️
+        is_user_symbols = False
+        if btn1["bg"] == "green":
             is_numbers = True
-        for letter in object_generate_password.letters:
-            if letter == i:
-                is_letters = True
-                break
-        for letter in object_generate_password.caps_letters:
-            if letter == i:
-                is_caps_letters = True
-                break
-        for letter in object_generate_password.symbols:
-            if letter == i:
-                is_symbols = True
-                break
-    if is_numbers == True:
-        btn1["bg"] = "green"
-    else:
-        btn1["bg"] = "red"
-    if is_letters == True:
-        btn2["bg"] = "green"
-    else:
-        btn2["bg"] = "red"
-    if is_caps_letters == True:
-        btn3["bg"] = "green"
-    else:
-        btn3["bg"] = "red"
-    if is_symbols == True:
-        btn4["bg"] = "green"
-    else:
-        btn4["bg"] = "red"
+        else:
+            btn1["bg"] = "red"
+        if btn2["bg"] == "green":
+            is_letters = True
+        else:
+            btn2["bg"] = "red"
+        if btn3["bg"] == "green":
+            is_caps_letters = True
+        else:
+            btn3["bg"] = "red"
+        if btn4["bg"] == "green":
+            is_symbols = True
+        else:
+            btn4["bg"] = "red"
+        if btn5["bg"] == "green":
+            is_dublicate = True
+        else:
+            btn5["bg"] = "red"
+    if is_user_symbols == True:
+
+        entr2.delete(0,END)
+        entr2.insert(0,str(len(entr1.get())))#заполнение поля длины пароля(будет в том случае если пользователь не указал сам длину пароля)
+
+        symbols = entr1.get()
+
+        copy_user_symbols = []
+        for i in symbols:
+            if i.isdigit() == True:
+                is_numbers = True
+            for letter in object_generate_password.letters:
+                if letter == i:
+                    is_letters = True
+                    break
+            for letter in object_generate_password.caps_letters:
+                if letter == i:
+                    is_caps_letters = True
+                    break
+            for letter in object_generate_password.symbols:
+                if letter == i:
+                    is_symbols = True
+                    break
+            if i in copy_user_symbols:
+                is_dublicate = True
+            else:
+                copy_user_symbols.append(i)
+        print(copy_user_symbols)
+        if is_numbers == True:
+            btn1["bg"] = "green"
+        else:
+            btn1["bg"] = "red"
+        if is_letters == True:
+            btn2["bg"] = "green"
+        else:
+            btn2["bg"] = "red"
+        if is_caps_letters == True:
+            btn3["bg"] = "green"
+        else:
+            btn3["bg"] = "red"
+        if is_symbols == True:
+            btn4["bg"] = "green"
+        else:
+            btn4["bg"] = "red"
+        if is_dublicate == False:
+            btn5["bg"] = "green"
+        else:
+            btn5["bg"] = "red"
+
 
 def validate_entr1(text):#валидация на галочку на сохранение измения
     global is_correct
@@ -119,9 +163,11 @@ use_user_symbols= True#значение False символа для пароля
 window = Tk()
 window.resizable(0,0)
 window.title("password from sfit")
-cnv = Canvas(window,width = 700,height=500)
+cnv = Canvas(window,width = 700,height=500,bg="#afdec2")
 cnv.pack()
-cnv_for_galochka = Canvas(cnv,width=25,height=25,bg="white")
+img_musorka = PhotoImage(file="musur_bag_s_chelovechkom.png")
+musorka =cnv.create_image(500,10,anchor = NW,image = img_musorka)
+cnv_for_galochka = Canvas(cnv,width=25,height=25,bg="#afdec2")
 cnv_for_galochka.place(x=50, y=300)
 regester_validate_entr1 = window.register(validate_entr1)#регестрация функции для валидации
 object_generate_password = generate_password()
@@ -142,7 +188,12 @@ btn5 = Button(cnv,text="Исключать похожие символы",font=(
 btn5.place(x = x_btn,y =430 )
 btn6 = Button(cnv,text="Сгенерировать",font=(None,20),bg= "gold",fg= "black",command=click_generate_password)
 btn6.place(x = 40 ,y =330 )
-
+#подключение функции на событие нажатие на кнопки
+btn1.bind("<Button-1>",lambda event: click_btns(btn1))#lambda - нужна для передачи функции параметра
+btn2.bind("<Button-1>",lambda event: click_btns(btn2))
+btn3.bind("<Button-1>",lambda event: click_btns(btn3))
+btn4.bind("<Button-1>",lambda event: click_btns(btn4))
+btn5.bind("<Button-1>",lambda event: click_btns(btn5))
 #all entr
 entr1 = Entry(cnv,font=(None,17),fg = "#757575",width=24,validate= "key",validatecommand= (regester_validate_entr1,"%P"))
 entr1.place(x= 5,y = 130)#  %P  = текст из елемента entr1
