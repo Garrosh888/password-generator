@@ -17,7 +17,7 @@ class generate_password():
         #self.len_password = len(self.users_symbols)
         use_index = []
         self.password = ""
-        for i in range(self.len_password):#цикл длится столько рас сколько длина нашего пароля
+        for i in range(self.len_password):#цикл длится столько раз сколько длина нашего пароля
             random_index = randint(0,len(self.users_symbols) -1)#random_index - случайный номер елемента из user_symbols для вставки в наш пароль
             if random_index in use_index:
                 while random_index in use_index:
@@ -32,11 +32,11 @@ class generate_password():
         print("введите длину пароля")
         self.len_password = int(input())
 
-    def generate_numbers_password(self):
+    def generate_one_type_password(self,stroka):
         self.password = ""
         for i in range(self.len_password):
-            index_number = randint(0, len(self.numbers) - 1)
-            self.password += self.numbers[index_number]
+            index_number = randint(0, len(stroka) - 1)
+            self.password += stroka[index_number]
         print(self.password)
     def generate_password_hard(self):
         self.password = ""

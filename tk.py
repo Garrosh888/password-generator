@@ -1,23 +1,53 @@
 from tkinter import*
 from generate_password import generate_password
+
+def click_musorka(event):
+    global permission_for_entr_password
+    entr1.delete(0,END)
+    entr2.delete(0,END)
+    permission_for_entr_password = True
+    entr_password.delete(0,END)
+    permission_for_entr_password = False
+    btn1["bg"] = "grey"
+    btn2["bg"] = "grey"
+    btn3["bg"] = "grey"
+    btn4["bg"] = "grey"
+    btn5["bg"] = "grey"
+
 def click_btns(btn):
     if btn["bg"] == "grey":
         btn["bg"] = "green"
     elif btn["bg"] == "green":
         btn["bg"] = "grey"
 
-def click_generate_password():
-    global permission_for_password
+def click_generate_password():#функция выполняется на желтую кнопку сгенерировать
+    global permission_for_entr_password
+    global is_user_symbols, is_numbers, is_letters, is_caps_letters, is_symbols, is_dublicate
     if is_correct == False:
         return
     generator = generate_password()
     generator.len_password = int(entr2.get())
-    generator.users_symbols = entr1.get()
-    generator.generate_user_symbols_password()
-    permission_for_password = True#permission - разришение
+    if entr1["fg"] != "#757575":
+        generator.users_symbols = entr1.get()
+        generator.generate_user_symbols_password()
+    else:
+        value_list = []
+        if is_numbers == True:
+            value_list.append(generator.numbers)
+        if is_letters == True:
+            value_list.append(generator.letters)
+        if is_caps_letters == True:
+            value_list.append(generator.caps_letters)
+        if is_symbols == True:
+            value_list.append(generator.symbols)
+        if len(value_list) == 4:
+            generator.generate_password_hard()
+        elif len(value_list) == 1:
+            generator.generate_one_type_password(value_list[0])
+    permission_for_entr_password = True#permission - разришение
     entr_password.delete(0,END)
     entr_password.insert(0,generator.password)
-    permission_for_password = False
+    permission_for_entr_password = False
 
 
 def focus_in_entr1(event):#удаление подскаски когда елемент в фокуси(когда наш курсор там)
@@ -39,13 +69,14 @@ def change_galocka(event):
         cnv_for_galochka.itemconfigure(img_galocka, image = img_red_galochka)
 
 def save_settings():
+    global is_user_symbols,is_numbers,is_letters,is_caps_letters,is_symbols,is_dublicate
     is_user_symbols = True
     is_numbers = False
     is_letters = False
     is_caps_letters = False
     is_symbols = False
     is_dublicate = False
-    if len(entr1.get()) == 0:#⬇⬇️⬇️
+    if len(entr1.get()) == 0 or entr1["fg"] == "#757575":#⬇⬇️⬇ ️
         is_user_symbols = False
         if btn1["bg"] == "green":
             is_numbers = True
@@ -147,7 +178,7 @@ def validate_length_pass_entr1(text):#validate это правило ,в дан�
     else:
         return True
 def validate_paste_password_entr(text):
-    return permission_for_password#это проверка entr_password запрет ввода туда символов
+    return permission_for_entr_password#это проверка entr_password запрет ввода туда символов
 
 
 def check_data():#проверка что пользвателем введено не более 24 символов
@@ -167,13 +198,19 @@ cnv = Canvas(window,width = 700,height=500,bg="#afdec2")
 cnv.pack()
 img_musorka = PhotoImage(file="musur_bag_s_chelovechkom.png")
 musorka =cnv.create_image(500,10,anchor = NW,image = img_musorka)
+cnv.tag_bind(musorka,"<Button-1>",click_musorka)
 cnv_for_galochka = Canvas(cnv,width=25,height=25,bg="#afdec2")
 cnv_for_galochka.place(x=50, y=300)
 regester_validate_entr1 = window.register(validate_entr1)#регестрация функции для валидации
 object_generate_password = generate_password()
-permission_for_password = False
+permission_for_entr_password = False#permission - разришение
 regester_validate_paste_password_entr = window.register(validate_paste_password_entr)
-
+is_user_symbols = True
+is_numbers = False
+is_letters = False
+is_caps_letters = False
+is_symbols = False
+is_dublicate = False
 #all btns
 x_btn = 330
 btn1 = Button(cnv,text="Цифры",font=(None,20),bg= "grey",fg= "black")
