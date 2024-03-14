@@ -14,11 +14,23 @@ def click_musorka(event):
     btn4["bg"] = "grey"
     btn5["bg"] = "grey"
 
-def click_btns(btn):
+def click_btns(btn,type_symbols):
+    global  is_symbols,is_numbers,is_letters,is_caps_letters
+    value = True
     if btn["bg"] == "grey":
         btn["bg"] = "green"
+        value = True
     elif btn["bg"] == "green":
         btn["bg"] = "grey"
+        value = False
+    if type_symbols == "numbers":
+        is_numbers = value
+    elif type_symbols == "symbols":
+        is_symbols = value
+    elif type_symbols == "letters":
+        is_letters = value
+    elif type_symbols == "caps_letters":
+        is_caps_letters = value
 
 def click_generate_password():#функция выполняется на желтую кнопку сгенерировать
     global permission_for_entr_password
@@ -26,7 +38,10 @@ def click_generate_password():#функция выполняется на жел
     if is_correct == False:
         return
     generator = generate_password()
-    generator.len_password = int(entr2.get())
+    if len(entr1.get()) >= 4 and len(entr1.get()) <= 24 and entr1["fg"] != "#757575":
+        generator.len_password = len(entr1.get())
+    else:
+        generator.len_password = int(entr2.get())
     if entr1["fg"] != "#757575":
         generator.users_symbols = entr1.get()
         generator.generate_user_symbols_password()
@@ -44,6 +59,11 @@ def click_generate_password():#функция выполняется на жел
             generator.generate_password_hard()
         elif len(value_list) == 1:
             generator.generate_one_type_password(value_list[0])
+        elif len(value_list) == 2:
+            generator.generate_password_two_types(value_list[0],value_list[1])
+        elif len(value_list) == 3:
+            generator.generate_password_three_types(value_list[0],value_list[1],value_list[2])
+
     permission_for_entr_password = True#permission - разришение
     entr_password.delete(0,END)
     entr_password.insert(0,generator.password)
@@ -185,8 +205,12 @@ def check_data():#проверка что пользвателем введен�
     global is_correct
     if len(entr1.get()) >= 4 and len(entr1.get()) <= 24:
         is_correct = True
+    elif  int(entr2.get()) >= 4 and int(entr2.get()) <= 24:
+        if btn1["bg"] == "green" or btn2["bg"] == "green" or btn3["bg"] == "green" or btn4["bg"] == "green":
+            is_correct = True
     else:
         is_correct = False
+
 
 
 
@@ -226,11 +250,11 @@ btn5.place(x = x_btn,y =430 )
 btn6 = Button(cnv,text="Сгенерировать",font=(None,20),bg= "gold",fg= "black",command=click_generate_password)
 btn6.place(x = 40 ,y =330 )
 #подключение функции на событие нажатие на кнопки
-btn1.bind("<Button-1>",lambda event: click_btns(btn1))#lambda - нужна для передачи функции параметра
-btn2.bind("<Button-1>",lambda event: click_btns(btn2))
-btn3.bind("<Button-1>",lambda event: click_btns(btn3))
-btn4.bind("<Button-1>",lambda event: click_btns(btn4))
-btn5.bind("<Button-1>",lambda event: click_btns(btn5))
+btn1.bind("<Button-1>",lambda event: click_btns(btn1,"numbers"))#lambda - нужна для передачи функции параметра
+btn2.bind("<Button-1>",lambda event: click_btns(btn2,"letters"))
+btn3.bind("<Button-1>",lambda event: click_btns(btn3,"caps_letters"))
+btn4.bind("<Button-1>",lambda event: click_btns(btn4,"symbols"))
+btn5.bind("<Button-1>",lambda event: click_btns(btn5,"no_some_similar_symbols"))
 #all entr
 entr1 = Entry(cnv,font=(None,17),fg = "#757575",width=24,validate= "key",validatecommand= (regester_validate_entr1,"%P"))
 entr1.place(x= 5,y = 130)#  %P  = текст из елемента entr1

@@ -38,6 +38,28 @@ class generate_password():
             index_number = randint(0, len(stroka) - 1)
             self.password += stroka[index_number]
         print(self.password)
+    def generate_password_two_types(self,str1,str2):
+        self.password = ""
+        for i in range(self.len_password):
+            value = randint(1,2)
+            if value == 1:
+                self.password += str1[randint(0,len(str1)-1)]
+            elif value == 2:
+                self.password += str2[randint(0, len(str2) - 1)]
+        print(self.password)
+
+    def generate_password_three_types(self,str1,str2,str3):
+        self.password = ""
+        for i in range(self.len_password):
+            value = randint(1,3)
+            if value == 1:
+                self.password += str1[randint(0,len(str1)-1)]
+            elif value == 2:
+                self.password += str2[randint(0, len(str2) - 1)]
+            elif value == 3:
+                self.password += str3[randint(0, len(str3) - 1)]
+        print(self.password)
+
     def generate_password_hard(self):
         self.password = ""
         for i in range(self.len_password):
@@ -51,6 +73,7 @@ class generate_password():
             elif value == 4:
                 self.password += self.symbols[randint(0, len(self.symbols) - 1)]
         print(self.password)
+
 
 #password_by_aziz = generate_password()
 #password_by_aziz.complite_user_symbols()
