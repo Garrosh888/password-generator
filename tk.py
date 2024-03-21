@@ -1,5 +1,19 @@
 from tkinter import*
 from generate_password import generate_password
+import time
+import pyperclip
+
+
+def click_copy(event):
+    if len(entr_password.get()) == 0:
+        return
+    else:
+        pyperclip.copy(entr_password.get())
+        cnv.itemconfigure(button_copy,image = img_copy_grey)
+        cnv.update()
+        cnv.update_idletasks()
+        time.sleep(0.2)
+        cnv.itemconfigure(button_copy, image=img_copy_black)
 
 def click_musorka(event):
     global permission_for_entr_password
@@ -222,6 +236,10 @@ cnv = Canvas(window,width = 700,height=500,bg="#afdec2")
 cnv.pack()
 img_musorka = PhotoImage(file="musur_bag_s_chelovechkom.png")
 musorka =cnv.create_image(500,10,anchor = NW,image = img_musorka)
+img_copy_black = PhotoImage(file= "copy_black.png")
+img_copy_grey = PhotoImage(file= "copy_grey.png")
+button_copy = cnv.create_image(600,15,anchor= NW,image =img_copy_black)
+cnv.tag_bind(button_copy,"<Button-1>",click_copy)
 cnv.tag_bind(musorka,"<Button-1>",click_musorka)
 cnv_for_galochka = Canvas(cnv,width=25,height=25,bg="#afdec2")
 cnv_for_galochka.place(x=50, y=300)
@@ -276,7 +294,6 @@ cnv.create_text(80,300,text="сохранить изменения",anchor=NW)
 cnv.create_text(5,10,text="количество символов от 4 до 24",anchor=NW)
 img_zelenaa_galochka = PhotoImage(file="zelenaa_galochka.png")
 img_red_galochka = PhotoImage(file ="red_galochka.png")
-
 img_galocka = cnv_for_galochka.create_image(2, 1, anchor = NW, image = img_red_galochka)#⬇
 #создание изображения с именем img_galocka на канве с свойством image = img_belaa_galochka
 cnv_for_galochka.tag_bind(img_galocka,"<Button-1>",change_galocka)
