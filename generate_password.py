@@ -8,7 +8,7 @@ class generate_password():
         self.numbers = "1234567890"
         self.letters = "qwertyuiopasdfghjklzxcvbnm"
         self.caps_letters = "QWERTYUIOPASDFGHJKLZXCVBNM"
-        self.symbols = "!#$%^&*()_+@}{:?></|\\, "
+        self.symbols = "!#$%^&*()_+@}{:?></|\\,"
         self.users_symbols = ""
     def complite_user_symbols(self):
         self.users_symbols = input("введите символы для пароля \n")

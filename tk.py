@@ -3,18 +3,31 @@ from generate_password import generate_password
 import time
 import pyperclip
 from datetime import datetime
-import descriptions_for_password
+from descriptions_for_password import Description
+def click_btn_description(event):
+    global description_is_open
+    if description_is_open == False:
+        description_is_open = True
+        cnv.itemconfigure(button_descriptions,image = img_btn_for_descriptions_grey)
+        window.geometry("900x500")
+        cnv.update()
+        cnv.update_idletasks()
+        time.sleep(0.2)
+        cnv.itemconfigure(button_descriptions, image=img_btn_for_descriptions_black)
+    else:
+        description_is_open = False
+        cnv.itemconfigure(button_descriptions,image= img_btn_for_descriptions_grey)
+        window.geometry("700x500")
+        cnv.update()
+        cnv.update_idletasks()
+        time.sleep(0.2)
+        cnv.itemconfigure(button_descriptions, image=img_btn_for_descriptions_black)
 def click_save(event):
 
     if len(entry_password.get()) == 0:
         return
     else:
-
-        with open("my passwords.txt","a") as password_file:#открытия файла в режиме для добавления текста
-
-            now_day = datetime.now()
-            info = f"{entry_password.get()} {now_day.day}.{now_day.month}.{now_day.year} {now_day.hour}:{now_day.minute}:{now_day.second} \n"
-            password_file.write(info)
+        Description(entry_password.get())
         cnv.itemconfigure(button_save, image=img_save_grey)#изменения свойства image у елемента button_save
         #itemconfigure - изменяет свойство елемента на канве
         cnv.update()#обнавляет канву
@@ -244,25 +257,30 @@ def check_data():#проверка что пользвателем введен�
         is_correct = False
 
 
-
+description_is_open = False
 description = None
 use_user_symbols= True#значение False символа для пароля генерируются програмой,значение True когда используються символы ввиденые пользователем
 window = Tk()
 window.resizable(0,0)
 window.title("password from sfit")
+window.geometry("700x500")
 cnv = Canvas(window,width = 700,height=500,bg="#afdec2")
-cnv.pack()
+cnv.place(x=0,y=0)
 img_musorka = PhotoImage(file="musur_bag_s_chelovechkom.png")
 musorka =cnv.create_image(500,10,anchor = NW,image = img_musorka)
 img_copy_black = PhotoImage(file="copy_black.png")
 img_copy_grey = PhotoImage(file="copy_grey.png")
 img_save_black = PhotoImage(file="save_black.png")
 img_save_grey = PhotoImage(file="save_grey.png")
+img_btn_for_descriptions_black = PhotoImage(file="descriptions_for_password_black.png")
+img_btn_for_descriptions_grey = PhotoImage(file="descriptions_for_password_grey.png")
 button_copy = cnv.create_image(600,15,anchor= NW,image =img_copy_black)
-button_save = cnv.create_image(600,130,anchor= NW,image= img_save_black)
+button_save = cnv.create_image(600,120,anchor= NW,image= img_save_black)
+button_descriptions = cnv.create_image(600,220,anchor= NW,image = img_btn_for_descriptions_black)
 cnv.tag_bind(button_copy,"<Button-1>",click_copy)
 cnv.tag_bind(musorka,"<Button-1>",click_musorka)
 cnv.tag_bind(button_save,"<Button-1>",click_save)
+cnv.tag_bind(button_descriptions,"<Button-1>",click_btn_description)
 cnv_for_galochka = Canvas(cnv,width=25,height=25,bg="#afdec2")
 cnv_for_galochka.place(x=50, y=300)
 regester_validate_entr1 = window.register(validate_entr1)#регестрация функции для валидации
