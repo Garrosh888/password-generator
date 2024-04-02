@@ -26,6 +26,7 @@ class Description():
 
             now_day = datetime.now()
             info = f"{self.password} {now_day.day}.{now_day.month}.{now_day.year}" \
-                   f" {now_day.hour}:{now_day.minute}:{now_day.second} - {self.descriptions.get('1.0','end')} \n"
+                   f" {now_day.hour}:{now_day.minute}:{now_day.second} - {self.descriptions.get('1.0','end')}"
+            #self.password(datetime.date.isoformat(datetime.date.today())) - это 28 строка от меня она оптемезирована как в книге
             password_file.write(info)
         self.window.destroy()
