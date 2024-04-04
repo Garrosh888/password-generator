@@ -1,9 +1,11 @@
 from tkinter import *
 from datetime import datetime
+
 class Description():
-    def  __init__(self,password):
+    def  __init__(self,password,save_password):
         self.password = password
         self.create_window()
+        self.seve_password = save_password
     def create_window(self):
         self.window = Tk()
         self.window.resizable(0, 0)
@@ -29,4 +31,5 @@ class Description():
                    f" {now_day.hour}:{now_day.minute}:{now_day.second} - {self.descriptions.get('1.0','end')}"
             #self.password(datetime.date.isoformat(datetime.date.today())) - это 28 строка от меня она оптемезирована как в книге
             password_file.write(info)
+        self.seve_password[self.password] = {f"{now_day.day}.{now_day.month}.{now_day.year} {now_day.hour}:{now_day.minute}:{now_day.second}":{self.descriptions.get('1.0','end')}}
         self.window.destroy()

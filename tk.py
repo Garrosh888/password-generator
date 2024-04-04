@@ -4,6 +4,29 @@ import time
 import pyperclip
 from datetime import datetime
 from descriptions_for_password import Description
+def get_description():
+    i = 0
+    for password, desk_and_date in save_passwords.items():
+        if i == current_password:
+            for date,desk in desk_and_date.items():
+                return desk
+        else:
+            i = i + 1
+def btn_back_current_password(event):
+    global current_password
+    if current_password > 0:
+        current_password = current_password - 1
+        cnv.itemconfigure(text_password, text=get_password())
+        cnv.itemconfigure(text_description,text =get_description())
+    print(current_password)
+def btn_next_current_password(event):
+    global current_password
+    if current_password < len(save_passwords.items()) -1:#- save_passwords.items() - items() это елементы словоря
+        current_password = current_password + 1
+        cnv.itemconfigure(text_password,text=get_password())
+        cnv.itemconfigure(text_description, text=get_description())
+    print(current_password)
+
 def get_password():
     i = 0
     for password,desk_and_date in save_passwords.items():
@@ -34,7 +57,7 @@ def click_save(event):
     if len(entry_password.get()) == 0:
         return
     else:
-        Description(entry_password.get())
+        Description(entry_password.get(),save_passwords)
         cnv.itemconfigure(button_save, image=img_save_grey)#изменения свойства image у елемента button_save
         #itemconfigure - изменяет свойство елемента на канве
         cnv.update()#обнавляет канву
@@ -330,6 +353,8 @@ cnv.tag_bind(button_copy,"<Button-1>",click_copy)
 cnv.tag_bind(musorka,"<Button-1>",click_musorka)
 cnv.tag_bind(button_save,"<Button-1>",click_save)
 cnv.tag_bind(button_descriptions,"<Button-1>",click_btn_description)
+cnv.tag_bind(button_next,"<Button-1>",btn_next_current_password)
+cnv.tag_bind(button_back,"<Button-1>",btn_back_current_password)
 cnv_for_galochka = Canvas(cnv,width=25,height=25,bg="#afdec2")
 cnv_for_galochka.place(x=50, y=300)
 
@@ -343,7 +368,8 @@ is_letters = False
 is_caps_letters = False
 is_symbols = False
 is_dublicate = False
-current_password = 0
+current_password = len(save_passwords.items()) -1
+print(current_password)
 #all btns
 x_btn = 330
 btn1 = Button(cnv,text="Цифры",font=(None,20),bg= "grey",fg= "black")
@@ -386,7 +412,7 @@ cnv.create_text(10,170,text="4-24 символа",anchor=NW)
 cnv.create_text(80,300,text="сохранить изменения",anchor=NW)
 cnv.create_text(5,10,text="количество символов от 4 до 24",anchor=NW)
 text_password = cnv.create_text(715,100,text= get_password(),anchor=NW,font=(None,10))
-text_description = cnv.create_text(715,180,text=f"erlfvberlkvb\nroefjhnvorev\nergoinvorginv\nrjheubvrvhb\n",anchor=NW,font=(None,10))
+text_description = cnv.create_text(715,180,text= get_description(),anchor=NW,font=(None,10))
 
 
 
