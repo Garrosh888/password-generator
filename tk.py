@@ -4,12 +4,44 @@ import time
 import pyperclip
 from datetime import datetime
 from descriptions_for_password import Description
-def get_description():
+def delite_password():
+    global current_password
+    print(save_passwords[get_password()])
+    del save_passwords[get_password()]
+    if current_password > 1
+   # print(save_passwords)
+    current_password = current_password -1
+    cnv.itemconfigure(text_password,text= get_password())
+    cnv.itemconfigure(text_description, text=get_description())
+    cnv.itemconfigure(text_date, text=get_date())
+
+def get_date():
     i = 0
     for password, desk_and_date in save_passwords.items():
         if i == current_password:
             for date,desk in desk_and_date.items():
-                return desk
+                new_date = ""
+                for i in range(len(date)):
+                    if i > len(data) -1:
+                        continue
+                    new_date = new_date + date[i]
+                return new_date
+        else:
+            i = i + 1
+def get_description():
+    i = 0
+    for password, desk_and_date in save_passwords.items():
+        if i == current_password:
+
+            for date, desk in desk_and_date.items():
+                new_desk = ""
+                for i in range(len(str(desk))):
+                    if i < 2 or i > len(str(desk)) - 2:
+                        continue
+                    else:
+                        new_desk = new_desk + str(desk)[i]
+                return str(desk)
+
         else:
             i = i + 1
 def btn_back_current_password(event):
@@ -18,6 +50,7 @@ def btn_back_current_password(event):
         current_password = current_password - 1
         cnv.itemconfigure(text_password, text=get_password())
         cnv.itemconfigure(text_description,text =get_description())
+        cnv.itemconfigure(text_date,text= get_date())
     print(current_password)
 def btn_next_current_password(event):
     global current_password
@@ -25,6 +58,7 @@ def btn_next_current_password(event):
         current_password = current_password + 1
         cnv.itemconfigure(text_password,text=get_password())
         cnv.itemconfigure(text_description, text=get_description())
+        cnv.itemconfigure(text_date, text=get_date())
     print(current_password)
 
 def get_password():
@@ -53,17 +87,18 @@ def click_btn_description(event):
         time.sleep(0.2)
         cnv.itemconfigure(button_descriptions, image=img_btn_for_descriptions_black)
 def click_save(event):
-
+    global current_password
     if len(entry_password.get()) == 0:
         return
     else:
-        Description(entry_password.get(),save_passwords)
+        Description(entry_password.get(),save_passwords,cnv,text_password,text_description,text_date,current_password)
         cnv.itemconfigure(button_save, image=img_save_grey)#изменения свойства image у елемента button_save
         #itemconfigure - изменяет свойство елемента на канве
         cnv.update()#обнавляет канву
         cnv.update_idletasks()#обнавляет елементы на канве
         time.sleep(0.2)
         cnv.itemconfigure(button_save, image=img_save_black)
+        current_password = current_password + 1
 
 def click_copy(event):
     if len(entry_password.get()) == 0:
@@ -358,6 +393,7 @@ cnv.tag_bind(button_back,"<Button-1>",btn_back_current_password)
 cnv_for_galochka = Canvas(cnv,width=25,height=25,bg="#afdec2")
 cnv_for_galochka.place(x=50, y=300)
 
+
 regester_validate_entr1 = window.register(validate_entr1)#регестрация функции для валидации
 object_generate_password = generate_password()
 permission_for_entr_password = False#permission - разришение
@@ -384,7 +420,7 @@ btn5 = Button(cnv,text="Исключать похожие символы",font=(
 btn5.place(x = x_btn,y= 430 )
 btn6 = Button(cnv,text="Сгенерировать",font=(None,20),bg= "gold",fg= "black",command=click_generate_password)
 btn6.place(x = 40 ,y =330 )
-btn_delete = Button(cnv,text="удалить этот пароль",font=(None,10),fg="red")
+btn_delete = Button(cnv,text="удалить этот пароль",font=(None,10),fg="red",command=delite_password)
 btn_delete.place(x= 737,y= 450)
 #подключение функции на событие нажатие на кнопки
 btn1.bind("<Button-1>",lambda event: click_btns(btn1,"numbers"))#lambda - нужна для передачи функции параметра
@@ -413,7 +449,7 @@ cnv.create_text(80,300,text="сохранить изменения",anchor=NW)
 cnv.create_text(5,10,text="количество символов от 4 до 24",anchor=NW)
 text_password = cnv.create_text(715,100,text= get_password(),anchor=NW,font=(None,10))
 text_description = cnv.create_text(715,180,text= get_description(),anchor=NW,font=(None,10))
-
+text_date = cnv.create_text(715,150,text=get_date(),anchor=NW,font=(None,10))
 
 
 img_zelenaa_galochka = PhotoImage(file="zelenaa_galochka.png")
