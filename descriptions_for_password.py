@@ -2,16 +2,10 @@ from tkinter import *
 from datetime import datetime
 
 class Description():
-    def  __init__(self,password,save_password,cnv,text_password,text_description,text_date,current_password):
+    def  __init__(self,password,save_password):
         self.password = password
         self.create_window()
         self.save_password = save_password
-        self.cnv = cnv
-        self.text_password = text_password
-        self.text_description = text_description
-        self.text_date = text_date
-        self.current_password = current_password
-
     def create_window(self):
         self.window = Tk()
         self.window.resizable(0, 0)
@@ -38,11 +32,6 @@ class Description():
             #self.password(datetime.date.isoformat(datetime.date.today())) - это 28 строка от меня она оптемезирована как в книге
             password_file.write(info)
         self.save_password[self.password] = {f"{now_day.day}.{now_day.month}.{now_day.year} {now_day.hour}:{now_day.minute}:{now_day.second}":{self.descriptions.get('1.0','end')}}
-        self.cnv.itemconfigure(self.text_password, text=self.get_password())
-        self.cnv.itemconfigure(self.text_description, text=self.get_description())
-        self.cnv.itemconfigure(self.text_date, text=self.get_date())
-        self.cnv.update()
-        self.cnv.update_idletasks()
         self.window.destroy()
 
     def get_date(self):
