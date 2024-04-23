@@ -24,10 +24,18 @@ def call_back(key,value,action):#call_back - это функция вызыва�
     cnv.itemconfigure(text_date, text=get_date())
 
 
-def click_delite_password():
-    del save_passwords[get_password()]#del - метод для удаления елемента
-
-
+def click_delete_password():
+    delete_password = get_password()#get_password() - функция ктороя получает текущий пароль
+    del save_passwords[get_password()]#del - метод для удаления елемента из  словаря
+    with open("my passwords.txt","r+") as file:
+        info = file.readlines()
+        file.seek(0)#установка курсора на первую позицию файла
+        for line in info:
+            if line.startswith(delete_password):#startswith - возращает true если строка line начинаеться с подстроки delete_password
+                pass
+            else:
+                file.write(line)
+        file.truncate()#truncate - обризает не нужные строки файла после курсора
 def get_date():
     if current_password == -1:
         return ""
@@ -438,7 +446,7 @@ btn5 = Button(cnv,text="Исключать похожие символы",font=(
 btn5.place(x = x_btn,y= 430 )
 btn6 = Button(cnv,text="Сгенерировать",font=(None,20),bg= "gold",fg= "black",command=click_generate_password)
 btn6.place(x = 40 ,y =330 )
-btn_delete = Button(cnv, text="удалить этот пароль", font=(None,10), fg="red", command=click_delite_password)
+btn_delete = Button(cnv, text="удалить этот пароль", font=(None,10), fg="red", command=click_delete_password)
 btn_delete.place(x= 737,y= 450)
 #подключение функции на событие нажатие на кнопки
 btn1.bind("<Button-1>",lambda event: click_btns(btn1,"numbers"))#lambda - нужна для передачи функции параметра
