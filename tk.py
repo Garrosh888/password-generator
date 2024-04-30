@@ -5,6 +5,9 @@ import pyperclip
 from dictionary import Supper_dict
 from datetime import datetime
 from descriptions_for_password import Description
+from save_my_new_password import Description_from_me
+def complite_new_passwor():
+    Description_from_me(save_passwords)
 
 def call_back(key,value,action):#call_back - это функция вызываеться кажды раз когда мы убераем или добовляем елемент в словарь
     global current_password
@@ -64,6 +67,14 @@ def get_description():
                 for i in range(len(new_desk)):
                    if new_desk[i]!= "{" and new_desk[i] != "\\" and new_desk[i]!= "}" and new_desk[i]!= "'":
                        value = value + new_desk[i]
+                format_value = ""
+            if len(value) > 20:
+                for i in range(len(value)):
+                    format_value =  format_value + value[i]
+                    if i >20 and i %20 == 0:
+                        format_value = format_value + "\n"
+                value = format_value
+
             return value
 
         else:
@@ -124,6 +135,7 @@ def click_save(event):
         cnv.update_idletasks()#обнавляет елементы на канве
         time.sleep(0.2)
         cnv.itemconfigure(button_save, image=img_save_black)
+
 
 def click_copy(event):
     if len(entry_password.get()) == 0:
@@ -253,6 +265,7 @@ def save_settings():
             is_dublicate = True
         else:
             btn5["bg"] = "red"
+
     if is_user_symbols == True:
 
         entr2.delete(0,END)
@@ -338,11 +351,13 @@ def validate_paste_password_entr(text):
 
 def check_data():#проверка что пользвателем введено не более 24 символов
     global is_correct
-    if len(entr1.get()) >= 4 and len(entr1.get()) <= 24:
+    if len(entr1.get()) >= 4 and len(entr1.get()) <= 24 and entr1['fg'] == "black":
         is_correct = True
     elif  int(entr2.get()) >= 4 and int(entr2.get()) <= 24:
         if btn1["bg"] == "green" or btn2["bg"] == "green" or btn3["bg"] == "green" or btn4["bg"] == "green":
             is_correct = True
+        else:
+            is_correct = False
     else:
         is_correct = False
 
@@ -401,13 +416,12 @@ img_save_black = PhotoImage(file="save_black.png")
 img_save_grey = PhotoImage(file="save_grey.png")
 img_btn_for_descriptions_black = PhotoImage(file="descriptions_for_password_black.png")
 img_btn_for_descriptions_grey = PhotoImage(file="descriptions_for_password_grey.png")
-img_clean_password = PhotoImage(file="small_musur_bag_s_chelovechkom.png")
 img_back = PhotoImage(file="strela_levo.png")
 img_next = PhotoImage(file="strela_pravo.png")
 button_copy = cnv.create_image(600,15,anchor= NW,image =img_copy_black)
 button_save = cnv.create_image(600,120,anchor= NW,image= img_save_black)
 button_descriptions = cnv.create_image(600,220,anchor= NW,image = img_btn_for_descriptions_black)
-button_clean_password = cnv.create_image(830,10,anchor=NW,image= img_clean_password)
+
 button_back = cnv.create_image(715,400,anchor=NW,image=img_back)
 button_next = cnv.create_image(850,400,anchor=NW,image=img_next)
 cnv.tag_bind(button_copy,"<Button-1>",click_copy)
@@ -448,6 +462,8 @@ btn6 = Button(cnv,text="Сгенерировать",font=(None,20),bg= "gold",fg
 btn6.place(x = 40 ,y =330 )
 btn_delete = Button(cnv, text="удалить этот пароль", font=(None,10), fg="red", command=click_delete_password)
 btn_delete.place(x= 737,y= 450)
+btn_complite_newpass = Button(cnv,text="добавть свой пароль",font=(None,10),fg="green",command=complite_new_passwor)
+btn_complite_newpass.place(x=737,y =30)
 #подключение функции на событие нажатие на кнопки
 btn1.bind("<Button-1>",lambda event: click_btns(btn1,"numbers"))#lambda - нужна для передачи функции параметра
 btn2.bind("<Button-1>",lambda event: click_btns(btn2,"letters"))
@@ -476,7 +492,7 @@ cnv.create_text(5,10,text="количество символов от 4 до 24"
 text_password = cnv.create_text(715,100,text= get_password(),anchor=NW,font=(None,10))
 text_description = cnv.create_text(715,180,text= get_description(),anchor=NW,font=(None,10))
 text_date = cnv.create_text(715,150,text=get_date(),anchor=NW,font=(None,10))
-
+text_warning = cnv.create_text(400,480,text="актуально только со своими символами",anchor=NW,font=(None,10))
 
 img_zelenaa_galochka = PhotoImage(file="zelenaa_galochka.png")
 img_red_galochka = PhotoImage(file ="red_galochka.png")
