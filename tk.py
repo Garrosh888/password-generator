@@ -6,6 +6,19 @@ from dictionary import Supper_dict
 from datetime import datetime
 from descriptions_for_password import Description
 from save_my_new_password import Description_from_me
+def get_all_info():
+    text = f"""\
+    {get_password()}
+    
+    
+    
+    {get_description()}
+    
+    
+    
+    {get_date()}
+    """
+    text_password_description_date.insert(END,text)
 def complite_new_passwor():
     Description_from_me(save_passwords)
 
@@ -21,11 +34,11 @@ def call_back(key,value,action):#call_back - это функция вызыва�
                 current_password = 0
             else:
                 current_password = -1
-    cnv.itemconfigure(text_password,text = get_password())
-    print(get_password())
-    cnv.itemconfigure(text_description, text=get_description())
-    cnv.itemconfigure(text_date, text=get_date())
+    text_password_description_date.configure(state="normal")
+    text_password_description_date.delete(1.0,END)
 
+    get_all_info()
+    text_password_description_date.configure(state="disabled")
 
 def click_delete_password():
     delete_password = get_password()#get_password() - функция ктороя получает текущий пароль
@@ -83,17 +96,19 @@ def btn_back_current_password(event):
     global current_password
     if current_password > 0:
         current_password = current_password - 1
-        cnv.itemconfigure(text_password, text=get_password())
-        cnv.itemconfigure(text_description,text =get_description())
-        cnv.itemconfigure(text_date,text= get_date())
+        text_password_description_date.configure(state="normal")
+        text_password_description_date.delete(1.0,END)
+        get_all_info()
+        text_password_description_date.configure(state="disabled")
     print(current_password)
 def btn_next_current_password(event):
     global current_password
     if current_password < len(save_passwords.items()) -1:#- save_passwords.items() - items() это елементы словоря
         current_password = current_password + 1
-        cnv.itemconfigure(text_password,text=get_password())
-        cnv.itemconfigure(text_description, text=get_description())
-        cnv.itemconfigure(text_date, text=get_date())
+        text_password_description_date.configure(state="normal")
+        text_password_description_date.delete(1.0,END)
+        get_all_info()
+    text_password_description_date.configure(state="disabled")
     print(current_password)
 
 def get_password():
@@ -489,10 +504,12 @@ cnv.create_text(5,111,text="Генерировать из символов:",anc
 cnv.create_text(10,170,text="4-24 символа",anchor=NW)
 cnv.create_text(80,300,text="сохранить изменения",anchor=NW)
 cnv.create_text(5,10,text="количество символов от 4 до 24",anchor=NW)
-text_password = cnv.create_text(715,100,text= get_password(),anchor=NW,font=(None,10))
-text_description = cnv.create_text(715,180,text= get_description(),anchor=NW,font=(None,10))
-text_date = cnv.create_text(715,150,text=get_date(),anchor=NW,font=(None,10))
 text_warning = cnv.create_text(400,480,text="актуально только со своими символами",anchor=NW,font=(None,10))
+text_password_description_date = Text(cnv,width=24,height=15,font=(None,10))
+get_all_info()
+text_password_description_date.place(x= 717,y= 100)
+text_password_description_date.configure(state="disabled")
+
 
 img_zelenaa_galochka = PhotoImage(file="zelenaa_galochka.png")
 img_red_galochka = PhotoImage(file ="red_galochka.png")
