@@ -59,11 +59,8 @@ def get_date():
     for password, desk_and_date in save_passwords.items():
         if i == current_password:
             for date,desk in desk_and_date.items():
-                new_date = ""
-                for i in range(len(date)):
-                    if i > len(data) -1:
-                        continue
-                    new_date = new_date + date[i]
+                new_date = date[:-2]
+
                 return new_date
         else:
             i = i + 1
