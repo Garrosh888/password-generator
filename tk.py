@@ -2,7 +2,7 @@ from tkinter import*
 from generate_password import generate_password
 import time
 import pyperclip
-from dictionary import Supper_dict
+from super_list import Supper_list
 from datetime import datetime
 from descriptions_for_password import Description
 from save_my_new_password import Description_from_me
@@ -23,7 +23,7 @@ def get_all_info():
 def complite_new_passwor():
     Description_from_me(save_passwords)
 
-def call_back(key,value,action):#call_back - это функция вызываеться кажды раз когда мы убераем или добовляем елемент в словарь
+def call_back(index,action):#call_back - это функция вызываеться кажды раз когда мы убераем или добовляем елемент в словарь
     global current_password
     if action == "set":
         current_password = current_password + 1
@@ -42,47 +42,22 @@ def call_back(key,value,action):#call_back - это функция вызыва�
     text_password_description_date.configure(state="disabled")
 
 def click_delete_password():
-    del save_passwords[get_password()]#del - метод для удаления елемента из  словаря
-    example_for_tk_from_SQL_database.delete_password(current_password)
+    if current_password < 0:
+        return
+    id = save_passwords[current_password].id
+    del save_passwords[current_password]#del - метод для удаления елемента из  словаря
+    example_for_tk_from_SQL_database.delete_password(id)
 
 
 def get_date():
     if current_password == -1:
         return ""
-    i = 0
-    for password, desk_and_date in save_passwords.items():
-        if i == current_password:
-            for date,desk in desk_and_date.items():
-                new_date = date[:-2]
-
-                return new_date
-        else:
-            i = i + 1
+    return save_passwords[current_password].date
 def get_description():
     if current_password == -1:
         return ""
-    i = 0
-    for password, desk_and_date in save_passwords.items():
-        if i == current_password:
+    return save_passwords[current_password].description
 
-            for date, desk in desk_and_date.items():
-                new_desk = str(desk)
-                value = ""
-                for i in range(len(new_desk)):
-                   if new_desk[i]!= "{" and new_desk[i] != "\\" and new_desk[i]!= "}" and new_desk[i]!= "'":
-                       value = value + new_desk[i]
-                format_value = ""
-            if len(value) > 20:
-                for i in range(len(value)):
-                    format_value =  format_value + value[i]
-                    if i >20 and i %20 == 0:
-                        format_value = format_value + "\n"
-                value = format_value
-
-            return value
-
-        else:
-            i = i + 1
 def btn_back_current_password(event):
     global current_password
     if current_password > 0:
@@ -94,7 +69,7 @@ def btn_back_current_password(event):
     print(current_password)
 def btn_next_current_password(event):
     global current_password
-    if current_password < len(save_passwords.items()) -1:#- save_passwords.items() - items() это елементы словоря
+    if current_password < len(save_passwords) -1:#- save_passwords.items() - items() это елементы словоря
         current_password = current_password + 1
         text_password_description_date.configure(state="normal")
         text_password_description_date.delete(1.0,END)
@@ -105,12 +80,8 @@ def btn_next_current_password(event):
 def get_password():
     if current_password == -1:
         return ""
-    i = 0
-    for password,desk_and_date in save_passwords.items():
-        if i == current_password:
-            return password
-        else:
-            i = i + 1
+    return save_passwords[current_password].password
+
 def click_btn_description(event):
     global description_is_open
     if description_is_open == False:
@@ -367,13 +338,14 @@ def check_data():#проверка что пользвателем введен�
     else:
         is_correct = False
 
-save_passwords = Supper_dict()
+save_passwords = Supper_list()
 data = None#переменная для хронения всей информации из  файла с паролями
-example_for_tk_from_SQL_database = save_sql_table()
 
+example_for_tk_from_SQL_database = save_sql_table()#создаем екземпляр save_sql_table
 example_for_tk_from_SQL_database.get_info(save_passwords)
-for password ,deskription in save_passwords.items():
-    print(password,deskription)
+
+for i in save_passwords:
+    print(i.password,i.description)
 example_for_tk_from_SQL_database = save_sql_table()
 description_is_open = False
 description = None
@@ -422,7 +394,7 @@ is_letters = False
 is_caps_letters = False
 is_symbols = False
 is_dublicate = False
-current_password = len(save_passwords.items()) -1
+current_password = len(save_passwords) -1
 print(current_password)
 #all btns
 x_btn = 330
