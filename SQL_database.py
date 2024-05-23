@@ -4,7 +4,10 @@ class save_sql_table():
     def __init__(self):
         self.connect = sqlite3.connect("data_base_password.db")  # execute - отправка запроса в базу данных
         self.cursor_object = self.connect.cursor()  # обьект для отправки запросов в базу данных
-
+    def get_id(self,password,description,date):
+        self.cursor_object.execute(f"SELECT id FROM table_password WHERE password = ? AND description = ? AND date = ?",(password,description,date))
+        id  = self.cursor_object.fetchall() #получаем результат и записали в таблицу.
+        return id[0][0]
 
     def edit_table(self,id,new_password,new_description):
         self.cursor_object.execute(f"UPDATE table_password SET password = ? ,description = ? WHERE id = ?",(new_password,new_description,id))

@@ -105,7 +105,7 @@ def click_save(event):
     if len(entry_password.get()) == 0:
         return
     else:
-        Description(entry_password.get(),save_passwords)
+        Description(entry_password.get(),save_passwords,example_for_tk_from_SQL_database)
         cnv.itemconfigure(button_save, image=img_save_grey)#изменения свойства image у елемента button_save
         #itemconfigure - изменяет свойство елемента на канве
         cnv.update()#обнавляет канву
