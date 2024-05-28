@@ -4,3 +4,5 @@ class Password_info():
         self.password = password
         self.date = date
         self.description = description
+        self.change = False
+

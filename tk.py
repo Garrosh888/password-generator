@@ -8,6 +8,8 @@ from descriptions_for_password import Description
 from save_my_new_password import Description_from_me
 from SQL_database import save_sql_table
 def get_all_info():
+    if current_password < 0:
+        text_password_description_date.insert(END,"у вас нету сохраненных паролей")
     text = f"""\
     {get_password()}
     
@@ -21,20 +23,21 @@ def get_all_info():
     """
     text_password_description_date.insert(END,text)
 def complite_new_passwor():
-    Description_from_me(save_passwords)
+    Description_from_me(save_passwords,example_for_tk_from_SQL_database)
+
 
 def call_back(index,action):#call_back - это функция вызываеться кажды раз когда мы убераем или добовляем елемент в словарь
     global current_password
     if action == "set":
         current_password = current_password + 1
     elif action == "delete":
-        if current_password > 1:
+        if current_password > 0:
             current_password = current_password - 1
         else:
-            if current_password < len(save_passwords) -1:
-                current_password = 0
-            else:
+            if  len(save_passwords) == 0:
                 current_password = -1
+
+
     text_password_description_date.configure(state="normal")
     text_password_description_date.delete(1.0,END)
 
@@ -43,10 +46,13 @@ def call_back(index,action):#call_back - это функция вызывает�
 
 def click_delete_password():
     if current_password < 0:
+        print("нету пароля")
+        get_all_info()
         return
     id = save_passwords[current_password].id
     del save_passwords[current_password]#del - метод для удаления елемента из  словаря
     example_for_tk_from_SQL_database.delete_password(id)
+
 
 
 def get_date():

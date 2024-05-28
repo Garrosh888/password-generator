@@ -8,7 +8,14 @@ class save_sql_table():
         self.cursor_object.execute(f"SELECT id FROM table_password WHERE password = ? AND description = ? AND date = ?",(password,description,date))
         id  = self.cursor_object.fetchall() #получаем результат и записали в таблицу.
         return id[0][0]
-
+    def get_password(self,id):
+        self.cursor_object.execute(f"SELECT password from table_password WHERE id = ?",(id,))
+        password = self.cursor_object.fetchall() #получаем результат и записали в таблицу.
+        return password[0][0]
+    def get_description(self,id):
+        self.cursor_object.execute(f"SELECT description from table_password WHERE id = ?",(id,))
+        description = self.cursor_object.fetchall() #получаем результат и записали в таблицу.
+        return description[0][0]
     def edit_table(self,id,new_password,new_description):
         self.cursor_object.execute(f"UPDATE table_password SET password = ? ,description = ? WHERE id = ?",(new_password,new_description,id))
         self.connect.commit()

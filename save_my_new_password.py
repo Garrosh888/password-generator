@@ -1,10 +1,11 @@
 from tkinter import *
 from datetime import datetime
-
+from password_info import Password_info
 class Description_from_me():
-    def  __init__(self,save_password):
+    def  __init__(self,save_password,table_sql):
         self.create_window()
         self.save_password = save_password
+        self.table_sql = table_sql
     def create_window(self):
         self.window = Tk()
         self.window.resizable(0, 0)
@@ -28,44 +29,12 @@ class Description_from_me():
     def click_save(self):
         if len(self.password_entry.get()) == 0:
             return
-        with open("my passwords.txt","a") as password_file:#открытия файла в режиме для добавления текста
-            password = self.password_entry.get()
-            now_day = datetime.now()
-            info = f"{password} {now_day.day}.{now_day.month}.{now_day.year}" \
-                   f" {now_day.hour}:{now_day.minute}:{now_day.second} - {self.descriptions.get('1.0','end')}"
-            #self.password(datetime.date.isoformat(datetime.date.today())) - это 28 строка от меня она оптемезирована как в книге
-            password_file.write(info)
-        self.save_password[password] = {f"{now_day.day}.{now_day.month}.{now_day.year} {now_day.hour}:{now_day.minute}:{now_day.second}":{self.descriptions.get('1.0','end')}}
+        now_day = datetime.now()
+        description = self.descriptions.get('1.0', 'end')  # получение описания к паролю
+        date = f"{now_day.day}.{now_day.month}.{now_day.year} {now_day.hour}:{now_day.minute}:{now_day.second}"
+        password = self.password_entry.get()
+        self.table_sql.insert_data(password, description, date)
+        id = self.table_sql.get_id(password, description, date)
+        password_info = Password_info(id,password, description, date)
+        self.save_password.append(password_info)
         self.window.destroy()
-
-    def get_date(self):
-        i = 0
-        for password, desk_and_date in self.save_password.items():
-            if i == self.current_password:
-                for date, desk in desk_and_date.items():
-                    return date
-            else:
-                i = i + 1
-
-    def get_description(self):
-        i = 0
-        for password, desk_and_date in self.save_password.items():
-            if i == self.current_password:
-                for date, desk in desk_and_date.items():
-                    new_desk = ""
-                    for i in range(len(str(desk))):
-                        if i < 2 or i > len(str(desk))-2:
-                            continue
-                        else:
-                            new_desk = new_desk + str(desk)[i]
-                    return new_desk
-            else:
-                i = i + 1
-
-    def get_password(self):
-        i = 0
-        for password, desk_and_date in self.save_password.items():
-            if i == self.current_password:
-                return password
-            else:
-                i = i + 1

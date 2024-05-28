@@ -13,6 +13,7 @@ class Supper_list(list):
 
     def __delitem__(self, index):# __delitem__ - этот метод автоматически вызываеться при удалении елемента из списка
         super().__delitem__(index)
+        print("pqweryui")
         for call_back in self.call_backs:
 
             call_back(index,"delete")

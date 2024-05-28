@@ -28,7 +28,7 @@ class Description():
 
     def click_save(self):
         now_day = datetime.now()
-        description = self.descriptions.get('1.0', 'end')
+        description = self.descriptions.get('1.0', 'end')#получение описания к паролю
         date = f"{now_day.day}.{now_day.month}.{now_day.year} {now_day.hour}:{now_day.minute}:{now_day.second}"
         self.table_sql.insert_data(self.password,description,date)
         id = self.table_sql.get_id(self.password,description,date)
