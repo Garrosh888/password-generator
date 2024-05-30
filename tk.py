@@ -7,6 +7,16 @@ from datetime import datetime
 from descriptions_for_password import Description
 from save_my_new_password import Description_from_me
 from SQL_database import save_sql_table
+from edit_password import Edit_password
+
+def change_password():
+    id = example_for_tk_from_SQL_database.get_id(get_password(),get_description(),get_date())
+    object_Edit_password = Edit_password(save_passwords,example_for_tk_from_SQL_database,id,current_password)
+
+
+
+
+
 def get_all_info():
     if current_password < 0:
         text_password_description_date.insert(END,"у вас нету сохраненных паролей")
@@ -348,7 +358,7 @@ save_passwords = Supper_list()
 data = None#переменная для хронения всей информации из  файла с паролями
 
 example_for_tk_from_SQL_database = save_sql_table()#создаем екземпляр save_sql_table
-example_for_tk_from_SQL_database.get_info(save_passwords)
+example_for_tk_from_SQL_database.get_info(save_passwords)#заполнение списка save_passwods из базы данных
 
 for i in save_passwords:
     print(i.password,i.description)
@@ -420,7 +430,7 @@ btn_delete = Button(cnv, text="удалить этот пароль", font=(None
 btn_delete.place(x= 737,y= 450)
 btn_complite_newpass = Button(cnv,text="добавть свой пароль",font=(None,10),fg="green",command=complite_new_passwor)
 btn_complite_newpass.place(x=737,y =30)
-btn_change = Button(cnv,text="изменить пароль и описание",font=(None,10),fg="green")
+btn_change = Button(cnv,text="изменить пароль и описание",font=(None,10),fg="green",command= change_password)
 btn_change.place(x=713,y =370)
 #подключение функции на событие нажатие на кнопки
 btn1.bind("<Button-1>",lambda event: click_btns(btn1,"numbers"))#lambda - нужна для передачи функции параметра

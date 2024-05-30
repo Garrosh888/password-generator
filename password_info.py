@@ -5,4 +5,3 @@ class Password_info():
         self.date = date
         self.description = description
         self.change = False
-
