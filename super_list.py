@@ -15,5 +15,10 @@ class Supper_list(list):
         super().__delitem__(index)
         print("pqweryui")
         for call_back in self.call_backs:
-
             call_back(index,"delete")
+    def __setitem__(self, index, value):
+        super(Supper_list, self).__setitem__(index,value)#super - обращение к родителю
+        for call_back in self.call_backs:
+            call_back(index,"edit")
+
+

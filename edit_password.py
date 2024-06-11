@@ -32,6 +32,8 @@ class Edit_password():
 
     def click_save(self):
         edit_password = self.password_entry.get()
+        if len(edit_password) == 0:
+            return
         edit_description =self.descriptions.get('1.0', 'end')
         date = self.save_passwords[self.current_password].date
         self.table_sql.edit_table(self.id,edit_password,edit_description)

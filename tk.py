@@ -46,7 +46,8 @@ def call_back(index,action):#call_back - это функция вызывает�
         else:
             if  len(save_passwords) == 0:
                 current_password = -1
-
+    elif action == "edit":
+        pass
 
     text_password_description_date.configure(state="normal")
     text_password_description_date.delete(1.0,END)
@@ -369,6 +370,7 @@ save_passwords.add_call_back(call_back)
 use_user_symbols= True#значение False символа для пароля генерируются програмой,значение True когда используються символы ввиденые пользователем
 window = Tk()
 window.resizable(0,0)
+window.iconbitmap("ikona2.ico")
 window.title("password from sfit")
 window.geometry("700x500")
 cnv = Canvas(window,width = 900,height=500,bg="#afdec2")
