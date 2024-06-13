@@ -20,17 +20,7 @@ def change_password():
 def get_all_info():
     if current_password < 0:
         text_password_description_date.insert(END,"у вас нету сохраненных паролей")
-    text = f"""\
-    {get_password()}
-    
-    
-    
-    {get_description()}
-    
-    
-    
-    {get_date()}
-    """
+    text = f"{get_password()}\n\n{get_description()}\n\n{get_date()}"
     text_password_description_date.insert(END,text)
 def complite_new_passwor():
     Description_from_me(save_passwords,example_for_tk_from_SQL_database)
@@ -104,7 +94,7 @@ def click_btn_description(event):
     if description_is_open == False:
         description_is_open = True
         cnv.itemconfigure(button_descriptions,image = img_btn_for_descriptions_grey)
-        window.geometry("900x500")
+        window.geometry("950x500")
         cnv.update()
         cnv.update_idletasks()
         time.sleep(0.2)
@@ -373,7 +363,7 @@ window.resizable(0,0)
 window.iconbitmap("ikona2.ico")
 window.title("password from sfit")
 window.geometry("700x500")
-cnv = Canvas(window,width = 900,height=500,bg="#afdec2")
+cnv = Canvas(window,width = 950,height=500,bg="#afdec2")
 cnv.place(x=0,y=0)
 cnv.create_line(705,0,705,500,width=5)
 img_musorka = PhotoImage(file="musur_bag_s_chelovechkom.png")
@@ -391,7 +381,7 @@ button_save = cnv.create_image(600,120,anchor= NW,image= img_save_black)
 button_descriptions = cnv.create_image(600,220,anchor= NW,image = img_btn_for_descriptions_black)
 
 button_back = cnv.create_image(715,400,anchor=NW,image=img_back)
-button_next = cnv.create_image(850,400,anchor=NW,image=img_next)
+button_next = cnv.create_image(900,400,anchor=NW,image=img_next)
 cnv.tag_bind(button_copy,"<Button-1>",click_copy)
 cnv.tag_bind(musorka,"<Button-1>",click_musorka)
 cnv.tag_bind(button_save,"<Button-1>",click_save)
@@ -429,11 +419,11 @@ btn5.place(x = x_btn,y= 430 )
 btn6 = Button(cnv,text="Сгенерировать",font=(None,20),bg= "gold",fg= "black",command=click_generate_password)
 btn6.place(x = 40 ,y =330 )
 btn_delete = Button(cnv, text="удалить этот пароль", font=(None,10), fg="red", command=click_delete_password)
-btn_delete.place(x= 737,y= 450)
+btn_delete.place(x= 763,y= 450)
 btn_complite_newpass = Button(cnv,text="добавть свой пароль",font=(None,10),fg="green",command=complite_new_passwor)
-btn_complite_newpass.place(x=737,y =30)
+btn_complite_newpass.place(x=762,y =30)
 btn_change = Button(cnv,text="изменить пароль и описание",font=(None,10),fg="green",command= change_password)
-btn_change.place(x=713,y =370)
+btn_change.place(x=738,y =370)
 #подключение функции на событие нажатие на кнопки
 btn1.bind("<Button-1>",lambda event: click_btns(btn1,"numbers"))#lambda - нужна для передачи функции параметра
 btn2.bind("<Button-1>",lambda event: click_btns(btn2,"letters"))
@@ -460,7 +450,7 @@ cnv.create_text(10,170,text="4-24 символа",anchor=NW)
 cnv.create_text(80,300,text="сохранить изменения",anchor=NW)
 cnv.create_text(5,10,text="количество символов от 4 до 24",anchor=NW)
 text_warning = cnv.create_text(400,480,text="актуально только со своими символами",anchor=NW,font=(None,10))
-text_password_description_date = Text(cnv,width=24,height=15,font=(None,10))
+text_password_description_date = Text(cnv,width=30,height=15,font=(None,10),wrap = "word",padx=5,pady = 5)
 get_all_info()
 text_password_description_date.place(x= 717,y= 100)
 text_password_description_date.configure(state="disabled")
